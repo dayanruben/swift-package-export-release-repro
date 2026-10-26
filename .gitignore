@@ -1,0 +1,9 @@
+.gradle/
+.kotlin/
+**/build/
+shared/SwiftPackage/
+consumer/*.xcodeproj/
+consumer/.build/
+consumer/Package.resolved
+consumer/DerivedData/
+.DS_Store
