@@ -7,7 +7,8 @@ This project contains only a tiny Kotlin library, a generated local Swift packag
 ## Requirements
 
 - macOS with Xcode 27.0 (27A266a) and XcodeGen 2.46.0
-- JDK 17 or newer; the recorded run used JDK 21.0.12.1
+- JDK 17 or newer; the original three Release failures used JDK 21.0.12.1,
+  and the 2026-10-26 confirmation used JDK 21.0.11
 - Gradle 9.7.1 (provided by the checked-in wrapper)
 - iOS 18 or newer deployment target
 
@@ -53,10 +54,12 @@ Both configurations should link the app against the generated Swift package.
 
 ## Observed result
 
-On macOS 27.0.1 (arm64), Xcode 27.0 (27A266a), JDK 21.0.12.1, and Gradle 9.7.1:
+On macOS 27.0.1 (arm64), Xcode 27.0 (27A266a), Kotlin 2.5.0-Beta2,
+Gradle 9.7.1, and XcodeGen 2.46.0:
 
 - `:shared:exportDebugSwiftPackage` and `:shared:exportReleaseSwiftPackage` both succeed.
-- The Xcode Debug build against `shared/SwiftPackage/Debug` succeeds.
+- The Xcode Debug build against `shared/SwiftPackage/Debug` succeeds, including
+  the fresh JDK 21.0.11 run.
 - The Xcode Release build against `shared/SwiftPackage/Release` failed in three earlier runs using separate, clean DerivedData directories and reproduced again in a fresh clean DerivedData directory on 2026-10-26:
 
 ```text
