@@ -11,6 +11,14 @@ This project contains only a tiny Kotlin library, a generated local Swift packag
 - Gradle 9.7.1 (provided by the checked-in wrapper)
 - iOS 18 or newer deployment target
 
+This reproducer exercises Kotlin 2.5.0-Beta2 Swift package export using a local
+package. Beta2 supports using `swiftPackageIntegration()` alongside
+`xcodeIntegration {}`, requires iOS 18 or macOS 15 or newer, and does not yet
+support combining Swift package export with Gradle's `swiftPMDependencies {}`.
+This minimal case has one exported Kotlin module and does not cover multi-module
+exports. The official Kotlin sample demonstrates both Xcode integration and a
+multi-module Swift package consumer: [Kotlin/swift-export-sample#5](https://github.com/Kotlin/swift-export-sample/pull/5).
+
 ## Reproduce
 
 Generate the Swift package and the Xcode project:
@@ -23,7 +31,7 @@ xcodegen generate --spec consumer/project-debug.yml
 Build Debug against the Debug package:
 
 ```sh
-xcodebuild -project SwiftPackageExportRepro.xcodeproj \
+xcodebuild -project consumer/SwiftPackageExportRepro.xcodeproj \
   -scheme SwiftPackageExportRepro -configuration Debug \
   -destination 'generic/platform=iOS Simulator' ARCHS=arm64 \
   CODE_SIGNING_ALLOWED=NO build
@@ -33,7 +41,7 @@ Switch the generated Xcode project to the Release package and build Release:
 
 ```sh
 xcodegen generate --spec consumer/project.yml
-xcodebuild -project SwiftPackageExportRepro.xcodeproj \
+xcodebuild -project consumer/SwiftPackageExportRepro.xcodeproj \
   -scheme SwiftPackageExportRepro -configuration Release \
   -destination 'generic/platform=iOS Simulator' ARCHS=arm64 \
   CODE_SIGNING_ALLOWED=NO build
@@ -49,7 +57,7 @@ On macOS 27.0.1 (arm64), Xcode 27.0 (27A266a), JDK 21.0.12.1, and Gradle 9.7.1:
 
 - `:shared:exportDebugSwiftPackage` and `:shared:exportReleaseSwiftPackage` both succeed.
 - The Xcode Debug build against `shared/SwiftPackage/Debug` succeeds.
-- The Xcode Release build against `shared/SwiftPackage/Release` failed in three runs using separate, clean DerivedData directories:
+- The Xcode Release build against `shared/SwiftPackage/Release` failed in three earlier runs using separate, clean DerivedData directories and reproduced again in a fresh clean DerivedData directory on 2026-10-26:
 
 ```text
 Undefined symbols for architecture arm64:
