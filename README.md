@@ -60,7 +60,7 @@ Gradle 9.7.1, and XcodeGen 2.46.0:
 - `:shared:exportDebugSwiftPackage` and `:shared:exportReleaseSwiftPackage` both succeed.
 - The Xcode Debug build against `shared/SwiftPackage/Debug` succeeds, including
   the fresh JDK 21.0.11 run.
-- The Xcode Release build against `shared/SwiftPackage/Release` failed in three earlier runs using separate, clean DerivedData directories and reproduced again in a fresh clean DerivedData directory on 2026-10-26:
+- The Xcode Release build against `shared/SwiftPackage/Release` failed in five earlier attempts (three with JDK 21.0.12.1 and two with JDK 21.0.11). It failed twice more on 2026-10-27 with Temurin 21.0.12.1, each using a separate clean DerivedData directory:
 
 ```text
 Undefined symbols for architecture arm64:
@@ -70,7 +70,7 @@ ld: symbol(s) not found for architecture arm64
 clang: error: linker command failed with exit code 1
 ```
 
-Setting `DEAD_CODE_STRIPPING=NO` did not resolve the Release linker failure. No workaround is confirmed. The project is deliberately a single exported module to keep the reproduction small; multi-module export is not covered by this minimal case.
+Setting `DEAD_CODE_STRIPPING=NO` did not resolve the Release linker failure. No workaround is confirmed. The project is deliberately a single exported module to keep the reproduction small; multi-module export is not covered by this minimal case. The two additional Release failures were reproduced with separate clean output directories and Temurin JDK 21.0.12.1.
 
 ## Versions
 
