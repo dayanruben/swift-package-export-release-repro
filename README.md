@@ -6,7 +6,8 @@ This project contains only a tiny Kotlin library, a generated local Swift packag
 
 ## Requirements
 
-- macOS with Xcode 27.0 (27A266a) and XcodeGen 2.46.0
+- macOS with Xcode 27.0 or newer and XcodeGen 2.46.0; the latest
+  confirmation used Xcode 27.2 (27B52)
 - JDK 17 or newer; the original three Release failures used JDK 21.0.12.1,
   and the 2026-10-26 confirmation used JDK 21.0.11
 - Gradle 9.7.1 (provided by the checked-in wrapper)
@@ -78,9 +79,16 @@ Swift package export tasks again succeeded and produced `Package.swift`, the
 generated Swift sources, and the XCFramework. The Xcode Debug consumer build
 passed. The Release consumer build failed twice more, each with a separate
 clean DerivedData directory, at the same undefined
-`_KotlinRuntimeSupport_linkAnchor` symbol. Across the nine prior clean failures
-and these two additional runs, Release linking failed in 11/11 attempts. No
-workaround is confirmed.
+`_KotlinRuntimeSupport_linkAnchor` symbol. Through this run, Release linking
+failed in 11/11 clean attempts. No workaround is confirmed.
+
+Further confirmation on 2026-11-01 used macOS 27.2 (arm64), Xcode 27.2
+(27B52), Swift 6.4.2, Temurin JDK 21.0.12.1+1, Gradle 9.7.1, and XcodeGen
+2.46.0, with an iOS 18.0 deployment target. The Debug consumer link passed.
+Two additional Release consumer builds, each using a separate clean DerivedData
+directory, failed with the same undefined `_KotlinRuntimeSupport_linkAnchor`
+symbol at the iOS Simulator arm64 link step. Across all recorded clean
+attempts, Release linking failed in 13/13 runs. No workaround is confirmed.
 
 ## Versions
 
