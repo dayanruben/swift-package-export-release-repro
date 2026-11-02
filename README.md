@@ -90,6 +90,25 @@ directory, failed with the same undefined `_KotlinRuntimeSupport_linkAnchor`
 symbol at the iOS Simulator arm64 link step. Across all recorded clean
 attempts, Release linking failed in 13/13 runs. No workaround is confirmed.
 
+Further confirmation on 2026-11-02 used macOS 27.2 (arm64), Xcode 27.2
+(27B52), Swift 6.4.2, Kotlin Gradle plugin 2.5.0-Beta2, Gradle 9.7.1, and an
+iOS 18.0 deployment target. The Gradle wrapper ran on JetBrains Runtime
+21.0.11. Both export tasks again succeeded and produced `Package.swift`,
+generated Swift sources, and the XCFramework. The Debug consumer link passed.
+Two more Release consumer builds, each with a separate clean DerivedData
+directory, failed at the iOS Simulator arm64 link step with the same
+`_KotlinRuntimeSupport_linkAnchor` undefined-symbol error. The total is now
+15/15 clean Release-link failures. No root cause or workaround is confirmed.
+
+The official multi-module sample at
+[Kotlin/swift-export-sample#5](https://github.com/Kotlin/swift-export-sample/pull/5)
+was also checked with Kotlin 2.5.0-Beta2 and Gradle 9.8.0. Its Debug and
+Release export tasks produced the package manifests, generated Swift sources,
+and XCFrameworks. `swift test` passed 70 tests in 24 suites against each
+generated package, and `swift run` passed. The sample's Xcode app still uses
+Xcode integration; a multi-module Xcode app link against the exported package
+was not tested.
+
 ## Versions
 
 The Kotlin Gradle plugin version is pinned in `gradle.properties`. The generated XCFramework and package are build outputs and are intentionally not committed.
