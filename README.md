@@ -112,3 +112,18 @@ was not tested.
 ## Versions
 
 The Kotlin Gradle plugin version is pinned in `gradle.properties`. The generated XCFramework and package are build outputs and are intentionally not committed.
+
+Further confirmation on 2026-11-03 used macOS 27.2 (arm64), Xcode 27.2
+(27B52), Swift 6.4.2, JetBrains Runtime 21.0.11, Kotlin Gradle plugin
+2.5.0-Beta2, Gradle 9.7.1, XcodeGen 2.46.0, and an iOS 18.0 deployment
+target. Both Swift package export tasks again succeeded and generated the
+package manifests, Swift sources, and XCFramework. The Debug Xcode consumer
+build passed. Two Release consumer builds, each using a separate clean
+DerivedData directory, failed at the iOS Simulator arm64 link step with the
+same undefined `_KotlinRuntimeSupport_linkAnchor` symbol. Release linking has
+now failed in 17/17 clean attempts. No root cause or workaround is confirmed.
+
+On the official Kotlin multi-module sample, the Debug and Release Swift package
+consumer test suites each passed (70 tests across 24 suites), and `swift run`
+passed. The sample's Xcode app still uses Xcode integration; linking its
+multi-module export through an Xcode Swift-package client remains untested.
