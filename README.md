@@ -127,3 +127,18 @@ On the official Kotlin multi-module sample, the Debug and Release Swift package
 consumer test suites each passed (70 tests across 24 suites), and `swift run`
 passed. The sample's Xcode app still uses Xcode integration; linking its
 multi-module export through an Xcode Swift-package client remains untested.
+
+Further confirmation on 2026-11-05 used macOS 27.2 (arm64), Xcode 27.2
+(27B52), Swift 6.4.2, JetBrains Runtime 21.0.11, Kotlin Gradle plugin
+2.5.0-Beta2, Gradle 9.7.1, XcodeGen 2.46.0, and an iOS 18.0 deployment
+target. Both export tasks again produced `Package.swift`, generated Swift
+sources, and `ComposablesKotlin.xcframework`. The Debug Xcode consumer build
+passed. Two Release consumer builds with separate clean DerivedData
+directories failed at the iOS Simulator arm64 link step with the same
+undefined `_KotlinRuntimeSupport_linkAnchor` symbol. Release linking has now
+failed in 19/19 clean attempts. No root cause or workaround is confirmed.
+
+On the official Kotlin multi-module sample, both Beta2 export tasks again
+produced Debug and Release packages and XCFrameworks. The Swift package
+consumer test suite passed 70 tests in 24 suites against each package. A
+multi-module Xcode app link against the exported package remains untested.
