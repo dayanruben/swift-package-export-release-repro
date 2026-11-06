@@ -142,3 +142,28 @@ On the official Kotlin multi-module sample, both Beta2 export tasks again
 produced Debug and Release packages and XCFrameworks. The Swift package
 consumer test suite passed 70 tests in 24 suites against each package. A
 multi-module Xcode app link against the exported package remains untested.
+
+Further confirmation on 2026-11-06 used macOS 27.2 (arm64), Xcode 27.2
+(27B52), Swift 6.4.2, JetBrains Runtime 21.0.11, Kotlin Gradle plugin
+2.5.0-Beta2, Gradle 9.7.1, XcodeGen 2.46.0, and an iOS 18.0 deployment
+target. Both export tasks again produced the Debug and Release `Package.swift`
+files, generated Swift sources, and `SharedKotlin.xcframework`. The Xcode Debug
+consumer build passed. Two more Xcode Release consumer builds, each with a
+separate clean DerivedData directory, failed at the iOS Simulator arm64 link
+step with the same undefined `_KotlinRuntimeSupport_linkAnchor` symbol. Release
+linking has now failed in 21/21 clean attempts. No root cause or workaround is
+confirmed.
+
+The official multi-module sample at
+[Kotlin/swift-export-sample#5](https://github.com/Kotlin/swift-export-sample/pull/5)
+(commit `f400b9358890220f7a7a1515826107bf612b7375`) was also tested with Kotlin
+2.5.0-Beta2 and Gradle 9.8.0. Both export tasks produced Debug and Release
+`Package.swift`, generated Swift sources, and `SharedKotlin.xcframework`. The
+SwiftPM consumer tests passed 51 tests in 13 suites against each package. The
+Debug `swift run` returned 0 (the sample printed its handled offline-network
+message). Two Release `swift run` attempts from separate clean consumer copies
+failed at the arm64 linker step with the same undefined
+`_KotlinRuntimeSupport_linkAnchor` symbol. This confirms the symptom in a
+multi-module SwiftPM consumer as well as the single-module Xcode consumer. The
+sample's Xcode app still uses Xcode integration; a multi-module Xcode app link
+against the exported package remains untested.
